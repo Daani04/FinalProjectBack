@@ -22,7 +22,7 @@ WORKDIR /app
 COPY . .
 
 # Instala las dependencias de Symfony SIN ejecutar auto-scripts
-RUN composer install --no-interaction --no-progress --prefer-dist --no-scripts
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-progress --prefer-dist
 
 # Expone el puerto usado por Render
 EXPOSE 8080
