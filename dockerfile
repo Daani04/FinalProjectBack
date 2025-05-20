@@ -1,7 +1,7 @@
-# Dockerfile
+# Usa PHP 8.2 con CLI
 FROM php:8.2-cli
 
-# Instala dependencias necesarias
+# Instala extensiones y herramientas necesarias
 RUN apt-get update && apt-get install -y \
     unzip \
     git \
@@ -12,21 +12,21 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     && docker-php-ext-install pdo pdo_mysql
 
-# Instala Composer
+# Instala Composer globalmente
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copia los archivos del proyecto
+# Define el directorio de trabajo
 WORKDIR /app
+
+# Copia todos los archivos al contenedor
 COPY . .
 
-# Instala dependencias de Symfony
-RUN composer install --no-interaction --no-progress --prefer-dist
+# Instala las dependencias de Symfony SIN ejecutar auto-scripts
+RUN composer install --no-interaction --no-progress --prefer-dist --no-scripts
 
-# Expone el puerto para Render
+# Expone el puerto usado por Render
 EXPOSE 8080
-
-# Render asigna el puerto a $PORT
 ENV PORT=8080
 
-# Comando para ejecutar el servidor Symfony
+# Comando para iniciar el servidor Symfony
 CMD php -S 0.0.0.0:$PORT -t public
