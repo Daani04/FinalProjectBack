@@ -20,7 +20,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "./"          # Toda la raíz del repo
+          source: "./"          # Toda la raíz del repositorio
           target: ${{ secrets.DEPLOY_PATH }}
 
       # Ejecutar comandos en EC2 para preparar backend
