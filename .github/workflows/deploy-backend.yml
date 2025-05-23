@@ -1,0 +1,38 @@
+name: Deploy Backend PHP to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Copiamos todo el backend al servidor EC2
+      - name: Copy backend files to EC2
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          source: "./"          # Si quieres copiar toda la raíz del repo
+          target: /home/ubuntu/StockMasterBack
+
+      # Ejecutar comandos en EC2 para preparar backend
+      - name: Run remote commands on EC2
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ${{ secrets.EC2_PATH }}
+            composer install --no-interaction --no-progress --prefer-dist
+            php bin/console cache:clear
+            # Aquí más comandos que necesites, ejemplo reiniciar PHP-FPM o servicios web
+
