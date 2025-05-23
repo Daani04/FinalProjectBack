@@ -20,7 +20,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          source: "./"          # Si quieres copiar toda la raíz del repo
+          source: "./"          # Si quieres copiar toda la raíz del repositorio
           target: /home/ubuntu/StockMasterBack
 
       # Ejecutar comandos en EC2 para preparar backend
